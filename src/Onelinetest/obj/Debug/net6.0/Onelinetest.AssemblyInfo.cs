@@ -15,11 +15,12 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("You can use it as you like.")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("simple test method")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.2")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.2")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.4")]
 [assembly: System.Reflection.AssemblyProductAttribute("Onelinetest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Onelinetest")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.2")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.4")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/wanggangzero/OneLineTest")]
 
 // 由 MSBuild WriteCodeFragment 类生成。
 
