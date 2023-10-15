@@ -39,7 +39,7 @@ namespace Gwang.Test
         /// 测试方法扩展
         /// </summary>
         /// <author>wanggangzero@vip.qq.com</author>
-        static void test(Action<long> ac, long num = 1000)
+        public static void test(Action<long> ac, long num = 1000)
         {
             var d1 = DateTime.Now;
             var m1 = Memuse();
