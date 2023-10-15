@@ -3,17 +3,15 @@
 ## How to use this lib?
 Usally I use this code in [RoslynPad](https://roslynpad.net "Home page."). 
 ```C#
-#r "nuget: Onelinetest, 1.0.6"     // import
+#r "nuget: Onelinetest, 1.0.7"     // import
 using static Gwang.Test.OneLine;   // using
 // use it like this
 test(()=>{
     // type here some testing code
-    var i=0;
-    _= i + (i * i);
-}, 10000);
-// or 
+});
+// or with a itor index (Because one more push stack operation,it may be a little slower, but it's not obvious.)
 test(i=>{
-    // some code
+    // some test code
 });
 ```    
 And it's output just like:
@@ -56,11 +54,6 @@ public static void test(Action ac, long num = 1000)
 /// </summary>
 /// <param name="ac">待测逻辑</param>
 /// <param name="num">循环次数,(default:1000)</param>
-/// <author>wanggangzero@vip.qq.com</author>
-
-/// <summary>
-/// 测试方法扩展
-/// </summary>
 /// <author>wanggangzero@vip.qq.com</author>
 public static void test(Action<long> ac, long num = 1000)
 {

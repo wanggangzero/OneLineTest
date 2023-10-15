@@ -2,11 +2,8 @@
 
 namespace Gwang.Test
 {
-
     public class OneLine
     {
-
-
         /// <summary>
         /// 测试方法扩展
         /// </summary>
@@ -33,11 +30,6 @@ namespace Gwang.Test
         /// </summary>
         /// <param name="ac">待测逻辑</param>
         /// <param name="num">循环次数,(default:1000)</param>
-        /// <author>wanggangzero@vip.qq.com</author>
-
-        /// <summary>
-        /// 测试方法扩展
-        /// </summary>
         /// <author>wanggangzero@vip.qq.com</author>
         public static void test(Action<long> ac, long num = 1000)
         {
