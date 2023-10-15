@@ -3,7 +3,7 @@
 ## How to use this lib?
 Usally I use this code in [RoslynPad](https://roslynpad.net "Home page."). 
 ```C#
-#r "nuget: Onelinetest, 1.0.4"     // import
+#r "nuget: Onelinetest, 1.0.5"     // import
 using static Gwang.Test.OneLine;   // using
 // use it like this
 test(()=>{
@@ -22,6 +22,8 @@ And it's output just like:
 ```
 So, it is very simple to use. 
 Hope you like it!
+
+Also, give me a star ⭐ if possible 🤗.
 
 ----
 And here is All the source code:
