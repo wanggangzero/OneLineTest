@@ -119,6 +119,30 @@ namespace Gwang.Test
             Console.WriteLine($"{(concur ? "并发" : "单核")}运行: {s,6}次, 耗时: {s2,8}, 内存占用: {s3,-8}.");
 
         }
+        private static void PrintMsgEn(long num, long mm, double ms, bool concur = false)
+        {
+            var s = num switch
+            {
+                < 1000000 and >= 1000 => $"{num / 1000f,5:###.#} thousand",
+                < 100000000 and >= 1000000 => $"{num / 1000000f,5:###.#} million",
+                >= 1000000000 => $"{num / 1000000000f,5:###.#} billion",
+                _ => $"{num,6:###}",
+            };
+            var s2 = ms switch
+            {
+                >= 1000 and < 60000 => $"{ms / 1000,9:#.000} seconds",
+                >= 60000 => $"{ms / 60000,3:#} minutes and {ms % 60000 / 1000,6:#.000} seconds",
+                _ => $"{ms,8:###.0000} milliseconds",
+            };
+            var s3 = mm switch
+            {
+                > 1024 and < 1024 * 1024 => $"{mm / 1024,4:#.##}Mb",
+                > 1024 * 1024 => $"{mm / 1024 / 1024,4:#.##}Gb",
+                _ => $"{mm,7:#.#}kb",
+            };
+            Console.WriteLine($"{(concur ? "Concurrent" : "Single-core")} runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,-8}.");
+
+        }
         private static void PrintMsg(long num, long mm, double ms, bool concur = false)
         {
             switch (CultureInfo.CurrentCulture.LCID)
@@ -127,26 +151,7 @@ namespace Gwang.Test
                     PrintMsgZh(num, mm, ms, concur);
                     break;
                 default:
-                    var s = num switch
-                    {
-                        < 1000000 and >= 1000 => $"{num / 1000f,5:###.#} thousand",
-                        < 100000000 and >= 1000000 => $"{num / 1000000f,5:###.#} million",
-                        >= 1000000000 => $"{num / 1000000000f,5:###.#} billion",
-                        _ => $"{num,6:###}",
-                    };
-                    var s2 = ms switch
-                    {
-                        >= 1000 and < 60000 => $"{ms / 1000,9:#.000} seconds",
-                        >= 60000 => $"{ms / 60000,3:#} minutes and {ms % 60000 / 1000,6:#.000} seconds",
-                        _ => $"{ms,8:###.0000} milliseconds",
-                    };
-                    var s3 = mm switch
-                    {
-                        > 1024 and < 1024 * 1024 => $"{mm / 1024,4:#.##}Mb",
-                        > 1024 * 1024 => $"{mm / 1024 / 1024,4:#.##}Gb",
-                        _ => $"{mm,7:#.#}kb",
-                    };
-                    Console.WriteLine($"{(concur ? "Concurrent" : "Single-core")} runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,-8}.");
+                    PrintMsgEn(num, mm, ms, concur);
                     break;
             }
         }
