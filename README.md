@@ -5,7 +5,7 @@ This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.7
 ## How to use this lib?
 Usally I use this code in [RoslynPad](https://roslynpad.net "访问官网"). 
 ```C#
-#r "nuget: Onelinetest, 1.0.7"     // import
+#r "nuget: Onelinetest, 1.0.8"     // import
 using static Gwang.Test.OneLine;   // using
 // use it like this
 test(()=>{
@@ -26,8 +26,13 @@ test(i=>{
 ```    
 And it's output just like:
 ``` 
-单核运行:   1.3亿次, 耗时: 418.0452毫秒, 内存占用:     316kb.
-并发运行:   1.3亿次, 耗时: 152.3742毫秒, 内存占用:     884kb.
+Normal:
+  Single-core runs:   126 million times, Elapsed: 465.9176 milliseconds, Memory usage:      12kb.
+  Concurrent runs:   126 million times, Elapsed: 147.9825 milliseconds, Memory usage:     924kb.
+Local Culture == 2052:
+  单核运行:   1.3亿次, 耗时: 418.0452毫秒, 内存占用:     316kb.
+  并发运行:   1.3亿次, 耗时: 152.3742毫秒, 内存占用:     884kb.
+
 ```
 So, it is very simple to use. 
 Hope you like it!
