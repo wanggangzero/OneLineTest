@@ -1,7 +1,9 @@
 # ReadMe
 
+This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.7#readme-body-tab "访问官网")
+
 ## How to use this lib?
-Usally I use this code in [RoslynPad](https://roslynpad.net "Home page."). 
+Usally I use this code in [RoslynPad](https://roslynpad.net "访问官网"). 
 ```C#
 #r "nuget: Onelinetest, 1.0.7"     // import
 using static Gwang.Test.OneLine;   // using
