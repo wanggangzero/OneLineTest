@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Gwang.Test
 {
+
+
     public class OneLine
     {
-
         /// <summary>
         /// 测试方法扩展
         /// </summary>
@@ -42,6 +43,7 @@ namespace Gwang.Test
 
                 var ms = (DateTime.Now - d1).TotalMilliseconds;
                 GC.EndNoGCRegion();
+                GC.Collect();
                 PrintMsg(num, mm, gcms, ms, concur);
             }
             else
@@ -82,6 +84,7 @@ namespace Gwang.Test
 
                 var ms = (DateTime.Now - d1).TotalMilliseconds;
                 GC.EndNoGCRegion();
+                GC.Collect();
                 PrintMsg(num, mm, gcms, ms, concur);
             }
             else
@@ -134,7 +137,7 @@ namespace Gwang.Test
                 _ => $"{gcms,7:#.#}kb",
             };
 
-            Console.WriteLine($"{(concur ? "并发" : "单核")}运行: {s,6}次, 耗时: {s2,8}, 内存占用: {s3,-6}, GC内存: {s4,-6}.");
+            Console.WriteLine($"{(concur ? "并发" : "单核")}运行: {s,6}次, 耗时: {s2,8}, 内存占用: {s3,5}, GC内存: {s4,5}.");
 
         }
         private static void PrintMsgEn(long num, long mm, long gcms, double ms, bool concur = false)
@@ -164,7 +167,7 @@ namespace Gwang.Test
                 > 1024 * 1024 => $"{gcms / 1024 / 1024,4:#.##}Gb",
                 _ => $"{gcms,7:#.#}kb",
             };
-            Console.WriteLine($"{(concur ? "Concurrent" : "Single-core")} runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,5}, GCed Mem: {s4,5}.");
+            Console.WriteLine($"{(concur ? "Concurrent" : "Single-core")} runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,5}, GC Requested Mem: {s4,5}.");
 
         }
         private static void PrintMsg(long num, long mm, long gcmm, double ms, bool concur = false)
@@ -187,5 +190,7 @@ namespace Gwang.Test
 
             return (proc.PrivateMemorySize64, GC.GetTotalMemory(false));
         }
+
+
     }
 }

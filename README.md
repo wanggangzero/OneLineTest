@@ -1,11 +1,11 @@
 # ReadMe
 
-This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.9#readme-body-tab "Download this lib")
+This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.10#readme-body-tab "Download this lib")
 
 ## How to use this lib?
 Usally I use this code in [RoslynPad](https://roslynpad.net "Download that powerful tool"). 
 ```C#
-#r "nuget: Onelinetest, 1.0.9"     // import
+#r "nuget: Onelinetest, 1.0.10"     // import
 using static Gwang.Test.OneLine;   // using
 // use it like this
 test(()=>{
