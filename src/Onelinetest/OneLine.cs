@@ -9,106 +9,75 @@ namespace Gwang.Test
 
     public class OneLine
     {
+
         /// <summary>
         /// 测试方法扩展
         /// </summary>
         /// <param name="ac">待测逻辑</param>
         /// <param name="num">循环次数,(default:1000)</param>
         /// <param name="concur">是否并发执行, (default: false)</param>
+        /// <param name="noGC">是否关闭GC.Collect执行(default: false)</param>
         /// <author>wanggangzero@vip.qq.com</author>
-        public static void test(Action ac, long num = 1000, bool concur = false)
+        public static void test(Action<long> ac, long num = 1000, bool concur = false, bool noGC = false)
         {
-
-            if (null != ac)
+            if (null == ac)
+            {
+                PrintMsg(0, 0, 0, 0, concur);
+                return;
+            }
+            if (noGC)
             {
                 GC.TryStartNoGCRegion(uint.MaxValue, true);
-                var d1 = DateTime.Now;
-
-                var m1 = Memuse().Item1;
-                var m2 = Memuse().Item2;
-                if (concur)
-                {
-                    Parallel.For(0, num, i => ac());
-                }
-                else
-                {
-                    for (long n = 0; n < num; n++)
-                    {
-                        ac();
-                    }
-                }
-
-                var mm = (Memuse().Item1 - m1) / 1024;
-                var gcms = (Memuse().Item2 - m2) / 1024;
-
-                var ms = (DateTime.Now - d1).TotalMilliseconds;
-                GC.EndNoGCRegion();
-                GC.Collect();
-                PrintMsg(num, mm, gcms, ms, concur);
+            }
+            var d1 = DateTime.Now;
+            var m1 = Memuse().Item1;
+            var m2 = Memuse().Item2;
+            if (concur)
+            {
+                Parallel.For(0, num, ac);
             }
             else
             {
-                PrintMsg(0, 0, 0, 0, concur);
+                for (long n = 0; n < num; n++)
+                {
+                    ac(n);
+                }
             }
+            var mm = (Memuse().Item1 - m1) / 1024;
+            var gcms = (Memuse().Item2 - m2) / 1024;
 
-        }
-        /// <summary>
-        /// 测试方法扩展
-        /// </summary>
-        /// <param name="ac">待测逻辑</param>
-        /// <param name="num">循环次数,(default:1000)</param>
-        /// <param name="concur">是否并发执行, (default: false)</param>
-        /// <author>wanggangzero@vip.qq.com</author>
-        public static void test(Action<long> ac, long num = 1000, bool concur = false)
-        {
-
-            if (null != ac)
+            var ms = (DateTime.Now - d1).TotalMilliseconds;
+            if (noGC)
             {
-                GC.TryStartNoGCRegion(uint.MaxValue, true);
-                var d1 = DateTime.Now;
-                var m1 = Memuse().Item1;
-                var m2 = Memuse().Item2;
-                if (concur)
-                {
-                    Parallel.For(0, num, ac);
-                }
-                else
-                {
-                    for (long n = 0; n < num; n++)
-                    {
-                        ac(n);
-                    }
-                }
-                var mm = (Memuse().Item1 - m1) / 1024;
-                var gcms = (Memuse().Item2 - m2) / 1024;
-
-                var ms = (DateTime.Now - d1).TotalMilliseconds;
                 GC.EndNoGCRegion();
-                GC.Collect();
-                PrintMsg(num, mm, gcms, ms, concur);
             }
-            else
-            {
-                PrintMsg(0, 0, 0, 0, concur);
-            }
+            GC.Collect();
+            PrintMsg(num, mm, gcms, ms, concur);
+
         }
 
         /// <summary>
-        /// 测试方法扩展(多核并发执行)
+        /// 测试方法扩展(单核执行)(无垃圾回收)
         /// </summary>
         /// <param name="ac">待测逻辑</param>
         /// <param name="num">循环次数,(default:1000)</param>
         /// <author>wanggangzero@vip.qq.com</author>
-        public static void testc(Action ac, long num = 1000) => test(ac, num, true);
+        public static void testngc(Action<long> ac, long num = 1000) => test(ac, num, false, true);
 
         /// <summary>
-        /// 测试方法扩展(多核并发执行)
+        /// 测试方法扩展(多核并发执行)(自动GC回收)
         /// </summary>
         /// <param name="ac">待测逻辑</param>
         /// <param name="num">循环次数,(default:1000)</param>
         /// <author>wanggangzero@vip.qq.com</author>
-        public static void testc(Action<long> ac, long num = 1000) => test(ac, num, true);
-
+        public static void testc(Action<long> ac, long num = 1000) => test(ac, num, true, false);
+        /// <summary>
+        /// 测试方法扩展(多核并发执行)(无GC回收操作)
+        /// </summary>
+        /// <param name="ac">待测逻辑</param>
+        /// <param name="num">循环次数,(default:1000)</param>
+        /// <author>wanggangzero@vip.qq.com</author>
+        public static void testcngc(Action<long> ac, long num = 1000) => test(ac, num, true, true);
         private static void PrintMsgZh(long num, long mm, long gcms, double ms, bool concur = false)
         {
             var s = num switch

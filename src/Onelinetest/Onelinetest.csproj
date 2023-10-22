@@ -8,10 +8,10 @@
     <Title>C#OneLineTest</Title>
     <Description>simple test method</Description>
     <Copyright>You can use it as you like.</Copyright>
-    <AssemblyVersion>1.0.10</AssemblyVersion>
-    <FileVersion>1.0.10</FileVersion>
-    <Version>1.0.10</Version>
-    <PackageReleaseNotes>add: GC collect after EndNoGCRegion().</PackageReleaseNotes>
+    <AssemblyVersion>1.0.11</AssemblyVersion>
+    <FileVersion>1.0.11</FileVersion>
+    <Version>1.0.11</Version>
+    <PackageReleaseNotes>add: function testngc() and testcngc(). remove: test(Action ac)</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/wanggangzero/OneLineTest</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

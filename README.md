@@ -1,17 +1,13 @@
 # ReadMe
 
-This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.10#readme-body-tab "Download this lib")
+This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.11#readme-body-tab "Download this lib")
 
 ## How to use this lib?
 Usally I use this code in [RoslynPad](https://roslynpad.net "Download that powerful tool"). 
 ```C#
-#r "nuget: Onelinetest, 1.0.10"     // import
+#r "nuget: Onelinetest, 1.0.11"     // import
 using static Gwang.Test.OneLine;   // using
 // use it like this
-test(()=>{
-    // type here some testing code
-});
-// or with a itor index (Because one more push stack operation,it may be a little slower, but it's not obvious.)
 test(i=>{
     // some test code
 });
@@ -19,10 +15,14 @@ test(i=>{
 testc(i=>{
     // some test code
 });
-// or with concur = true
-test(i=>{
+// or start a NoGC Test.(It is easier to understand the memory allocation.)
+testngc(i=>{
     // some test code
-},1000,true);
+});
+// ps.The memory occupied by GC in parallel mode is multiplied.
+testcngc(i=>{
+    // some test code
+});
 ```    
 And it's output just like:
 ``` 
@@ -38,6 +38,16 @@ So, it is very simple to use.
 Hope you like it!
 
 Also, give me a star [⭐](https://github.com/wanggangzero/OneLineTest "Github") if possible 🤗.
+
+---
+Version history:
+
+|version|contents|
+|---|:--|
+|1.0.1|The primary simple version.|
+|1.0.4|Add an itor number for Action.|
+|1.0.8|Add local Culture recognition, 2502 uses Chinese output, other english.|
+|1.0.11|Add NoGC mod, it is easier to understand the memory allocation(for example as zeroGC programing).|
 
 ----
 And [here](https://github.com/wanggangzero/OneLineTest "click to view source code") is All the source code.
