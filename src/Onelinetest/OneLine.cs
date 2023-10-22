@@ -20,8 +20,11 @@ namespace Gwang.Test
 
             if (null != ac)
             {
+                GC.TryStartNoGCRegion(uint.MaxValue, true);
                 var d1 = DateTime.Now;
-                var m1 = Memuse();
+
+                var m1 = Memuse().Item1;
+                var m2 = Memuse().Item2;
                 if (concur)
                 {
                     Parallel.For(0, num, i => ac());
@@ -33,13 +36,17 @@ namespace Gwang.Test
                         ac();
                     }
                 }
-                var mm = (Memuse() - m1) / 1024;
+
+                var mm = (Memuse().Item1 - m1) / 1024;
+                var gcms = (Memuse().Item2 - m2) / 1024;
+
                 var ms = (DateTime.Now - d1).TotalMilliseconds;
-                PrintMsg(num, mm, ms, concur);
+                GC.EndNoGCRegion();
+                PrintMsg(num, mm, gcms, ms, concur);
             }
             else
             {
-                PrintMsg(0, 0, 0, concur);
+                PrintMsg(0, 0, 0, 0, concur);
             }
 
         }
@@ -55,8 +62,10 @@ namespace Gwang.Test
 
             if (null != ac)
             {
+                GC.TryStartNoGCRegion(uint.MaxValue, true);
                 var d1 = DateTime.Now;
-                var m1 = Memuse();
+                var m1 = Memuse().Item1;
+                var m2 = Memuse().Item2;
                 if (concur)
                 {
                     Parallel.For(0, num, ac);
@@ -68,13 +77,16 @@ namespace Gwang.Test
                         ac(n);
                     }
                 }
-                var mm = (Memuse() - m1) / 1024;
+                var mm = (Memuse().Item1 - m1) / 1024;
+                var gcms = (Memuse().Item2 - m2) / 1024;
+
                 var ms = (DateTime.Now - d1).TotalMilliseconds;
-                PrintMsg(num, mm, ms, concur);
+                GC.EndNoGCRegion();
+                PrintMsg(num, mm, gcms, ms, concur);
             }
             else
             {
-                PrintMsg(0, 0, 0, concur);
+                PrintMsg(0, 0, 0, 0, concur);
             }
         }
 
@@ -94,7 +106,7 @@ namespace Gwang.Test
         /// <author>wanggangzero@vip.qq.com</author>
         public static void testc(Action<long> ac, long num = 1000) => test(ac, num, true);
 
-        private static void PrintMsgZh(long num, long mm, double ms, bool concur = false)
+        private static void PrintMsgZh(long num, long mm, long gcms, double ms, bool concur = false)
         {
             var s = num switch
             {
@@ -115,11 +127,17 @@ namespace Gwang.Test
                 > 1024 * 1024 => $"{mm / 1024 / 1024,4:#.##}Gb",
                 _ => $"{mm,7:#.#}kb",
             };
+            var s4 = gcms switch
+            {
+                > 1024 and < 1024 * 1024 => $"{gcms / 1024,4:#.##}Mb",
+                > 1024 * 1024 => $"{gcms / 1024 / 1024,4:#.##}Gb",
+                _ => $"{gcms,7:#.#}kb",
+            };
 
-            Console.WriteLine($"{(concur ? "并发" : "单核")}运行: {s,6}次, 耗时: {s2,8}, 内存占用: {s3,-8}.");
+            Console.WriteLine($"{(concur ? "并发" : "单核")}运行: {s,6}次, 耗时: {s2,8}, 内存占用: {s3,-6}, GC内存: {s4,-6}.");
 
         }
-        private static void PrintMsgEn(long num, long mm, double ms, bool concur = false)
+        private static void PrintMsgEn(long num, long mm, long gcms, double ms, bool concur = false)
         {
             var s = num switch
             {
@@ -140,28 +158,34 @@ namespace Gwang.Test
                 > 1024 * 1024 => $"{mm / 1024 / 1024,4:#.##}Gb",
                 _ => $"{mm,7:#.#}kb",
             };
-            Console.WriteLine($"{(concur ? "Concurrent" : "Single-core")} runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,-8}.");
+            var s4 = gcms switch
+            {
+                > 1024 and < 1024 * 1024 => $"{gcms / 1024,4:#.##}Mb",
+                > 1024 * 1024 => $"{gcms / 1024 / 1024,4:#.##}Gb",
+                _ => $"{gcms,7:#.#}kb",
+            };
+            Console.WriteLine($"{(concur ? "Concurrent" : "Single-core")} runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,5}, GCed Mem: {s4,5}.");
 
         }
-        private static void PrintMsg(long num, long mm, double ms, bool concur = false)
+        private static void PrintMsg(long num, long mm, long gcmm, double ms, bool concur = false)
         {
             switch (CultureInfo.CurrentCulture.LCID)
             {
                 case 2052:
-                    PrintMsgZh(num, mm, ms, concur);
+                    PrintMsgZh(num, mm, gcmm, ms, concur);
                     break;
                 default:
-                    PrintMsgEn(num, mm, ms, concur);
+                    PrintMsgEn(num, mm, gcmm, ms, concur);
                     break;
             }
         }
 
-        private static long Memuse()
+        private static (long, long) Memuse()
         {
             //获得当前工作进程
             Process proc = Process.GetCurrentProcess();
-            return proc.PrivateMemorySize64;
-        }
 
+            return (proc.PrivateMemorySize64, GC.GetTotalMemory(false));
+        }
     }
 }
