@@ -1,13 +1,9 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Threading.Tasks;
-
 namespace Gwang.Test
 {
-
-
     public class OneLine
     {
 
@@ -107,9 +103,18 @@ namespace Gwang.Test
                 > 1024 * 1024 => $"{gcms / 1024 / 1024,6:#0.00}Gb",
                 _ => $"{gcms,6:#0.00}kb",
             };
+            var str = $"执行: {s,6}次, 耗时: {s2,8}, 内存: {s3,0000000}, GC内存: {s4}.";
+            var title = $"{(concur ? "并发" : "单核"),3}+{(ngc ? "无GC" : "有GC"),3}";
 
-            Console.WriteLine($"{(concur ? "并发" : "单核"),3}+{(ngc ? "无GC" : "有GC"),3}运行: {s,6}次, 耗时: {s2,8}, 内存: {s3,5}, GC内存: {s4,5}.");
-
+            if (IsTypePresent("RoslynPad.Runtime", "ObjectExtensions", out Type? ext))
+            {
+                var md = ext?.GetMethods().First(mi => mi.Name == "Dump" && mi.IsGenericMethod)?.MakeGenericMethod(typeof(string));
+                md?.Invoke(null, new object[] { str, title, 4, 1, 10000, 10000 });
+            }
+            else
+            {
+                Console.WriteLine($"{title} {str}.");
+            }
         }
         private static void PrintMsgEn(long num, long mm, long gcms, double ms, bool concur = false, bool ngc = false)
         {
@@ -117,7 +122,7 @@ namespace Gwang.Test
             {
                 < 1000000 and >= 1000 => $"{num / 1000f,5:###.#} thousand",
                 < 1000000000 and >= 1000000 => $"{num / 1000000f,5:###.#} million",
-               >= 1000000000 => $"{num / 1000000000f,5:###.#} billion",
+                >= 1000000000 => $"{num / 1000000000f,5:###.#} billion",
                 _ => $"{num,6:###}",
             };
             var s2 = ms switch
@@ -138,7 +143,18 @@ namespace Gwang.Test
                 > 1024 * 1024 => $"{gcms / 1024 / 1024,4:#.##}Gb",
                 _ => $"{gcms,7:#.#}kb",
             };
-            Console.WriteLine($"{(concur ? "Concurrent" : "Single-core")}+{(ngc ? "NoneGC" : "WithGC")} runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,5}, GC Requested Mem: {s4,5}.");
+            var str = $"runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,5}, GC Requested Mem: {s4,5}.";
+            var title = $"{(concur ? "Concurrent" : "SingleCore")}+{(ngc ? "NoneGC" : "WithGC")}";
+
+            if (IsTypePresent("RoslynPad.Runtime", "ObjectExtensions", out var ext))
+            {
+                var md = ext?.GetMethods().First(mi => mi.Name == "Dump" && mi.IsGenericMethod)?.MakeGenericMethod(typeof(string));
+                md?.Invoke(null, new object[] { str, title, 4, 1, 10000, 10000 });
+            }
+            else
+            {
+                Console.WriteLine($"{title} {str}");
+            }
         }
         private static void PrintMsg(long num, long mm, long gcmm, double ms, bool concur = false, bool ngc = false)
         {
@@ -152,7 +168,26 @@ namespace Gwang.Test
                     break;
             }
         }
-       
+        public static bool IsTypePresent(string AssemblyName, string TypeName, out Type? supType)
+        {
+            try
+            {
+                Assembly asmb = Assembly.Load(new AssemblyName(AssemblyName));
+                supType = asmb.GetType($"{AssemblyName}.{TypeName}");
+                if (supType != null)
+                {
+                    try { Activator.CreateInstance(supType); }
+                    catch (MissingMethodException) { }
+                }
+                return supType != null;
+            }
+            catch
+            {
+                supType = null;
+                return false;
+            }
+
+        }
         private static (long, long) Memuse()
         {
             //获得当前工作进程
