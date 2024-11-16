@@ -106,15 +106,23 @@ namespace Gwang.Test
             var str = $"执行: {s,6}次, 耗时: {s2,8}, 内存: {s3,0000000}, GC内存: {s4}.";
             var title = $"{(concur ? "并发" : "单核"),3}+{(ngc ? "无GC" : "有GC"),3}";
 
-            if (IsTypePresent("RoslynPad.Runtime", "ObjectExtensions", out Type? ext))
-            {
-                var md = ext?.GetMethods().First(mi => mi.Name == "Dump" && mi.IsGenericMethod)?.MakeGenericMethod(typeof(string));
-                md?.Invoke(null, new object[] { str, title, 4, 1, 10000, 10000 });
-            }
-            else
-            {
-                Console.WriteLine($"{title} {str}.");
-            }
+           if (IsTypePresent("RoslynPad.Runtime", "RoslynPad.Runtime.ObjectExtensions", out var ext))
+    		{
+    			var md = ext?.GetMethods().First(mi => mi.Name == "Dump" && mi.IsGenericMethod)?.MakeGenericMethod(typeof(string));
+    			md?.Invoke(null, new object[] { str, title, 4, 1, 10000, 10000 });
+    		}
+    		else if (IsTypePresent("LINQPad.Runtime", "LINQPad.Extensions", out var ext1))
+    		{
+    			var md = ext1?.GetMethods().First(mi => mi.Name == "Dump"
+    			&& mi.IsGenericMethod
+    			&& mi.GetParameters().Count() == 2
+    			)?.MakeGenericMethod(typeof(string));
+    			md?.Invoke(title, new object[] { str, title });
+    		}
+    		else
+    		{
+    			Console.WriteLine($"{title} {str}");
+    		}
         }
         private static void PrintMsgEn(long num, long mm, long gcms, double ms, bool concur = false, bool ngc = false)
         {
@@ -146,15 +154,23 @@ namespace Gwang.Test
             var str = $"runs: {s,6} times, Elapsed: {s2,8}, Memory usage: {s3,5}, GC Requested Mem: {s4,5}.";
             var title = $"{(concur ? "Concurrent" : "SingleCore")}+{(ngc ? "NoneGC" : "WithGC")}";
 
-            if (IsTypePresent("RoslynPad.Runtime", "ObjectExtensions", out var ext))
-            {
-                var md = ext?.GetMethods().First(mi => mi.Name == "Dump" && mi.IsGenericMethod)?.MakeGenericMethod(typeof(string));
-                md?.Invoke(null, new object[] { str, title, 4, 1, 10000, 10000 });
-            }
-            else
-            {
-                Console.WriteLine($"{title} {str}");
-            }
+            if (IsTypePresent("RoslynPad.Runtime", "RoslynPad.Runtime.ObjectExtensions", out var ext))
+    		{
+    			var md = ext?.GetMethods().First(mi => mi.Name == "Dump" && mi.IsGenericMethod)?.MakeGenericMethod(typeof(string));
+    			md?.Invoke(null, new object[] { str, title, 4, 1, 10000, 10000 });
+    		}
+    		else if (IsTypePresent("LINQPad.Runtime", "LINQPad.Extensions", out var ext1))
+    		{
+    			var md = ext1?.GetMethods().First(mi => mi.Name == "Dump"
+    			&& mi.IsGenericMethod
+    			&& mi.GetParameters().Count() == 2
+    			)?.MakeGenericMethod(typeof(string));
+    			md?.Invoke(title, new object[] { str, title });
+    		}
+    		else
+    		{
+    			Console.WriteLine($"{title} {str}");
+    		}
         }
         private static void PrintMsg(long num, long mm, long gcmm, double ms, bool concur = false, bool ngc = false)
         {
@@ -168,12 +184,12 @@ namespace Gwang.Test
                     break;
             }
         }
-        public static bool IsTypePresent(string AssemblyName, string TypeName, out Type? supType)
+        public static bool IsTypePresent(string AssemblyName, string TypeName, out Type supType)
         {
             try
             {
                 Assembly asmb = Assembly.Load(new AssemblyName(AssemblyName));
-                supType = asmb.GetType($"{AssemblyName}.{TypeName}");
+                supType = asmb.GetType($"{TypeName}");
                 if (supType != null)
                 {
                     try { Activator.CreateInstance(supType); }
