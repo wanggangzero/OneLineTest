@@ -1,11 +1,11 @@
 # ReadMe
 
-This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.13#readme-body-tab "Download this lib")
+This lib was updated to [nuget](https://www.nuget.org/packages/Onelinetest/1.0.14#readme-body-tab "Download this lib")
 
 ## How to use this lib?
 Usally I use this code in [RoslynPad](https://roslynpad.net "Download that powerful tool"). 
 ```C#
-#r "nuget: Onelinetest, 1.0.13"     // import
+#r "nuget: Onelinetest, 1.0.14"     // import
 using static Gwang.Test.OneLine;   // using
 // use it like this
 test(i=>{
@@ -51,6 +51,7 @@ Version history:
 |1.0.8|增加了语言环境识别, 除了2052显示简体中文,其他显示英文.<br>Add local Culture recognition, 2502 uses Chinese output, other english.|
 |1.0.11|增加了禁用GC模式(一般情况下性能会变差), 便于了解内存分配(比如zeroGC编程的时候).<br> Add NoGC mod(worse performance), it is easier to understand the memory allocation(for example as zeroGC programing).|
 |1.0.13|改进输出文本.<br>A little Improve for the output text.|
+|1.0.14|修改RoslynPad19/20Dump函数兼容,增加LinqPad.Dump函数调用.<br>Fix: RoslynPad19/20 dump method, add: LinqPad.Dump() method.|
 
 ----
 And [here](https://github.com/wanggangzero/OneLineTest "click to view source code") is All the source code.

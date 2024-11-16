@@ -189,7 +189,7 @@ namespace Gwang.Test
             try
             {
                 Assembly asmb = Assembly.Load(new AssemblyName(AssemblyName));
-                supType = asmb.GetType($"{TypeName}");
+                supType = asmb.GetType(TypeName);
                 if (supType != null)
                 {
                     try { Activator.CreateInstance(supType); }
