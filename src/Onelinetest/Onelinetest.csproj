@@ -8,10 +8,10 @@
     <Title>C#OneLineTest</Title>
     <Description>simple test method</Description>
     <Copyright>You can use it as you like.</Copyright>
-    <AssemblyVersion>1.0.14</AssemblyVersion>
-    <FileVersion>1.0.14</FileVersion>
-    <Version>1.0.14</Version>
-    <PackageReleaseNotes>Fix: 适配roslynpad19/20的dump方法签名修改. Add: support for Linqpad's dump.</PackageReleaseNotes>
+    <AssemblyVersion>1.0.15</AssemblyVersion>
+    <FileVersion>1.0.15</FileVersion>
+    <Version>1.0.15</Version>
+    <PackageReleaseNotes>Fix.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/wanggangzero/OneLineTest</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
